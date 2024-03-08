@@ -13,8 +13,26 @@ const fs = require("fs");
 //fs.readfilessync pull it out return it to them
 //tested with postman or browser. may be some differences.
 const server = http.createServer((req, res) => {
-  const html = fs.readFileSync("./index.html", "utf-8");
-  console.log(html);
+  const url = req.url;
+  if (url.endsWith('css')) {
+    const css = fs.readFileSync('./assets/css/application.css', 'utf-8')
+    res.statusCode = 200;
+    res.getHeader('content-type', 'text/css')
+    res.end(css);
+  } else if (url.endsWith('jpg')) {
+    const img = fs.readFileSync('./assets/images/dog.jpg')
+    res.statusCode = 302;
+    res.getHeader('content-type', 'image/jpeg')
+    res.end(img)
+  } else {
+
+    const html = fs.readFileSync("./index.html", "utf-8");
+    res.statusCode = 200;
+    res.getHeader('content-type', 'text/html')
+    res.end(html);
+  }
+  
+  
 });
 
 const port = 5000;
